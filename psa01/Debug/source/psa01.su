@@ -1,0 +1,5 @@
+C:\Users\User\Desktop\tank\tank\psa01\drivers/fsl_power.h:385:20:POWER_DisablePD	16	static
+../source/psa01.c:20:7:myAbs	16	static
+../source/psa01.c:24:6:PowerControl	80	static
+../source/psa01.c:134:6:ADC0_IRQHandler	8	static
+../source/psa01.c:143:5:main	8	static

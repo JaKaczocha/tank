@@ -1,0 +1,10 @@
+"Task Aware Debugger for GDB" version 11.9.0 (202311161535)
+Copyright 2016-2023 NXP
+==================================
+02:36:51.267 INFO: [ZephyrRTOS] .config file could not be read [C:\Users\User\Desktop\tank\tank\psa01\Debug\.config (Nie można odnaleźć określonego pliku)]
+02:36:51.267 INFO: [TadModel] DSF session ID 2 has started.
+02:37:00.147 INFO: [TadState] TAD state changed: DEBUG_STARTED -> DEBUG_INIT_0 (RESUMED, USER_REQUEST)
+02:37:00.191 INFO: [TadState] TAD state changed: DEBUG_INIT_0 -> DEBUG_INIT_1 (SUSPENDED, SIGNAL)
+02:37:01.420 INFO: [TadState] TAD state changed: DEBUG_INIT_1 -> DEBUG_SUSPENDED (RESUMED, USER_REQUEST)
+02:37:01.471 INFO: [TadState] TAD state changed: DEBUG_SUSPENDED -> DEBUG_SUSPENDED (SUSPENDED, ERROR)
+02:37:03.917 INFO: [TadModel] DSF session ID 2 has ended.
