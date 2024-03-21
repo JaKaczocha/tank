@@ -21,107 +21,40 @@ float myAbs(float a) {
 	return a > 0.0 ? a : -a;
 }
 
+float map(float x, float in_min, float in_max,float out_min, float out_max) {
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
 void PowerControl(float X, float Y)
 {
-	OLED_Progressbar_Frame(0, BARPOS1, BARSIZE, BARMODE);
-	OLED_Progressbar_Frame(0, BARPOS2, BARSIZE, BARMODE);
 
-	float	Xval= -((X/(32768.0))-1);
-	float	Yval= -((Y/32768.0)-1);
+	OLED_Draw_Circle(OLED_WIDTH/2, OLED_HEIGHT/2, OLED_HEIGHT/2);
 
-	{
-		if( Xval < 0.03f && Xval > -0.03f ) {
-			Xval = 0.0f;
-		}
-		if( Yval < 0.03f && Yval > -0.03f ) {
-				Yval = 0.0f;
-		}
-	}
+	uint8_t x1 =OLED_WIDTH/4,  y1 = 0,x2 =OLED_WIDTH/4 * 3, y2 = OLED_HEIGHT-1;
+	//OLED_Draw_Rect(x1, 0, OLED_WIDTH/4 * 3, OLED_HEIGHT-1, 1);
 
-	float left = Xval, right = Yval;
-	if(myAbs(Yval) <= 0.2 && myAbs(Xval) <= 0.2 ) { //w miejscu
-		right = 0;
-		left = 0;
+	//float	Xval= map(X,0,65536,32,96); //swap
+	//float	Yval= map(Y,0,65536,0,63); //swap
+	float	Xval= ((X/(32768.0))-1);
+	float	Yval= ((Y/32768.0)-1);
 
-	}
-	else if(Yval >= 0.2) { //do przodu
 
-		if(Xval <= -0.2) { //troche w lewo
-			right = 1.0;
-			left = 1.0 + 2*Xval;
-			//OLED_Puts(0, 0, "//lewo i do przodu");
+	float Xnew = Xval * sqrt(1-Yval * Yval /2);
+	float Ynew = Yval * sqrt(1-Xval * Xval / 2);
 
-		}
-		else if( Xval >= 0.2) {//troche w prawo
-			left = 1.0;
-			right = -1.0 + 2*Yval;
-			//OLED_Puts(0, 0, "//prawo  i do przodu");
-
-		}
-		else { //prosto że prosto
-			left = 1.0;
-			right = 1.0;
-			//OLED_Puts(0, 0, "//prosto że prosto     ");
-
-		}
-
-	}
-	else if(Yval <= -0.2) { //do tyłu
-		/*
-		if(Xval <= -0.2) { //troche w lewo
-			right = -1.0;
-			left = -1.0 - 2*Yval;
-			//OLED_Puts(0, 0, "//lewy tył        ");
-
-		}
-		else if( Xval >= 0.2) {//troche w prawo
-			left = -1.0;
-			right = -1.0 + 2*Xval;
-			//OLED_Puts(0, 0, "//prawy tył        ");
-
-		}*/
-		if(Yval >= -0.3) {
-			left = 0;
-			right = 0;
-		}
-		else { //prosto że do tyłu
-			left = -Yval;
-			right = -Yval;
-			//OLED_Puts(0, 0, "//prosto ze do tyłu       ");
-
-		}
-
-	}
-	else if(Xval > 0.2) {
-
-		//OLED_Puts(0, 0, "//prawo       >>>>>>>>>>");
-		left = 1.0;
-		right = -1.0;
-
-	}
-	else if(Xval < -0.2f) {
-
-		//OLED_Puts(0, 0, "//lewo       <<<<<<<<<<<");
-
-		left = -1.0;
-		right = 1.0;
-	}
+	Xval= map(Xnew,-1,1,32,96); //swap
+    Yval= map(Ynew,-1,1,0,63); //swap
 
 
 
-	//some calculations;
+	//char sbuff[32];
+	//sprintf(sbuff, "X:%5.2f Y:%5.2f", Xval, Yval);
 
-
-	char sbuff[32];
-
-	sprintf(sbuff, "X:%5.2f Y:%5.2f", Xval, Yval);
-	//sprintf(sbuff, "l:%5.2f r:%5.2f", left, right);
-	OLED_Puts(0, 0, sbuff);
-
-	OLED_Progressbar_Value(0, BARPOS1, BARSIZE, BARMODE, left);
-	OLED_Progressbar_Value(0, BARPOS2, BARSIZE, BARMODE, right);
+	//OLED_Puts(0, 0, sbuff);
+	//OLED_Draw_Point(Xval, Yval, 1);
+	OLED_Draw_Fill_Rect(Xval-2, Yval-2, Xval+2, Yval + 2, 1);
 	OLED_Refresh_Gram();
-
+	OLED_Clear_Screen(0);
 
 }
 
@@ -155,6 +88,7 @@ int main(void) {
 	OLED_Init(I2C_OLED);
 
 	while(1) {
+
 		PowerControl(adcCh1, adcCh2);
 	}
 	return 0 ;
